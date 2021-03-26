@@ -289,7 +289,7 @@ def train(dataset, verbose=False):
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings("ignore")
-    torch.cuda.set_device(3)
+    # torch.cuda.set_device(3)
 
     # 'cora', 'citeseer', 'pubmed'
     dataset = 'cora'
