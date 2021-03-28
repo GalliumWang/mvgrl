@@ -5,6 +5,7 @@ import torch.nn as nn
 from utils import sparse_mx_to_torch_sparse_tensor
 from node.dataset import load
 
+# all cuda method diabled
 
 # Borrowed from https://github.com/PetarV-/DGI
 class GCN(nn.Module):
@@ -143,7 +144,7 @@ class LogReg(nn.Module):
 
 def train(dataset, verbose=False):
 
-    nb_epochs = 3000
+    nb_epochs = 5   #FIXME
     patience = 20
     lr = 0.001
     l2_coef = 0.0
@@ -155,8 +156,8 @@ def train(dataset, verbose=False):
     ft_size = features.shape[1]
     nb_classes = np.unique(labels).shape[0]
 
-    sample_size = 2000
-    batch_size = 4
+    sample_size = 800   #FIXME
+    batch_size = 1  #FIXME
 
     labels = torch.LongTensor(labels)
     idx_train = torch.LongTensor(idx_train)
@@ -249,9 +250,9 @@ def train(dataset, verbose=False):
     features = torch.FloatTensor(features[np.newaxis])
     adj = torch.FloatTensor(adj[np.newaxis])
     diff = torch.FloatTensor(diff[np.newaxis])
-    features = features.cuda()
-    adj = adj.cuda()
-    diff = diff.cuda()
+    # features = features.cuda()
+    # adj = adj.cuda()
+    # diff = diff.cuda()
 
     embeds, _ = model.embed(features, adj, diff, sparse, None)
     train_embs = embeds[0, idx_train]
@@ -266,7 +267,7 @@ def train(dataset, verbose=False):
     for _ in range(50):
         log = LogReg(hid_units, nb_classes)
         opt = torch.optim.Adam(log.parameters(), lr=1e-2, weight_decay=wd)
-        log.cuda()
+        # log.cuda()
         for _ in range(300):
             log.train()
             opt.zero_grad()
